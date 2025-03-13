@@ -38,4 +38,9 @@ public class OrderController {
     public void deletePizzaOrder(@PathVariable Long id) {
         pizzaOrderService.deletePizzaOrder(id);
     }
+    @GetMapping("/past")
+    public ResponseEntity<List<Order>> getPastOrdersByCustomer(@RequestParam String customerName) {
+        List<Order> pastOrders = pizzaOrderService.getPastOrdersByCustomer(customerName);
+        return ResponseEntity.ok(pastOrders);
+    }
 }

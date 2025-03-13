@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
         double totalAmount = ((Collection<OrderItem>) pizzaOrder.getOrderDate()).stream()
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
-        existingOrder.setTotalAmount(totalAmount);
+        existingOrder.setTotalAmount(pizzaOrder.getTotalAmount());
 
         return pizzaOrderRepository.save(existingOrder);
     }
@@ -54,4 +54,10 @@ public class OrderServiceImpl implements OrderService {
     public void deletePizzaOrder(Long id) {
         pizzaOrderRepository.deleteById(id);
     }
+
+	@Override
+	public List<Order> getPastOrdersByCustomer(String customerName) {
+		// TODO Auto-generated method stub
+		return pizzaOrderRepository.findByCustomerName(customerName);
+	}
 }

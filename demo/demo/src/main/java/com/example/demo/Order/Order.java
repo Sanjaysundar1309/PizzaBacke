@@ -26,9 +26,7 @@ public class Order {
     private String deliveryAddress;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
-
-
-	private List<OrderItem> orderItems;
+    private List<OrderItem> orderItems;
 
 	public Order() {
 		super();

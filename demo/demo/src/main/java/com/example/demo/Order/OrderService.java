@@ -8,6 +8,7 @@ public interface OrderService {
     Order getPizzaOrderById(Long id);
     Order updatePizzaOrder(Long id, Order pizzaOrder);
     void deletePizzaOrder(Long id);
+	List<Order> getPastOrdersByCustomer(String customerName);
 }
 
 
