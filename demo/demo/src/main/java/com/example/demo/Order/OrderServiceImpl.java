@@ -1,9 +1,9 @@
 package com.example.demo.Order;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -14,11 +14,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order createPizzaOrder(Order pizzaOrder) {
+        // Set the order reference in each order item
+        pizzaOrder.getOrderItems().forEach(item -> item.setOrder(pizzaOrder));
+
         // Calculate total amount based on pizza items
         double totalAmount = pizzaOrder.getOrderItems().stream()
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
         pizzaOrder.setTotalAmount(totalAmount);
+
         return pizzaOrderRepository.save(pizzaOrder);
     }
 
@@ -30,21 +34,29 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getPizzaOrderById(Long id) {
         return pizzaOrderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pizza Order not found"));
+                .orElseThrow(() -> new RuntimeException("Pizza Order not found with id: " + id));
     }
 
     @Override
     public Order updatePizzaOrder(Long id, Order pizzaOrder) {
         Order existingOrder = getPizzaOrderById(id);
+
+        // Update order details
         existingOrder.setCustomerName(pizzaOrder.getCustomerName());
         existingOrder.setDeliveryAddress(pizzaOrder.getDeliveryAddress());
         existingOrder.setOrderDate(pizzaOrder.getOrderDate());
+        existingOrder.setStatus(pizzaOrder.getStatus());
+
+        // Update order items
+        existingOrder.getOrderItems().clear(); // Clear existing items
+        existingOrder.getOrderItems().addAll(pizzaOrder.getOrderItems()); // Add new items
+        existingOrder.getOrderItems().forEach(item -> item.setOrder(existingOrder)); // Set order reference
 
         // Recalculate total amount
-        double totalAmount = ((Collection<OrderItem>) pizzaOrder.getOrderDate()).stream()
+        double totalAmount = pizzaOrder.getOrderItems().stream()
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
-        existingOrder.setTotalAmount(pizzaOrder.getTotalAmount());
+        existingOrder.setTotalAmount(totalAmount);
 
         return pizzaOrderRepository.save(existingOrder);
     }
@@ -54,9 +66,8 @@ public class OrderServiceImpl implements OrderService {
         pizzaOrderRepository.deleteById(id);
     }
 
-	@Override
-	public List<Order> getPastOrdersByCustomer(String customerName) {
-		// TODO Auto-generated method stub
-		return pizzaOrderRepository.findByCustomerName(customerName);
-	}
+    @Override
+    public List<Order> getPastOrdersByCustomer(String customerName) {
+        return pizzaOrderRepository.findByCustomerName(customerName);
+    }
 }
