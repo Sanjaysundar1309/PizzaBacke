@@ -1,9 +1,12 @@
 package com.example.demo.Order;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
+@Table(name="order_item")
 public class OrderItem {
 
     @Id
@@ -16,6 +19,7 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonIgnore
     private Order order;
 
     // Constructors, Getters, and Setters

@@ -9,6 +9,11 @@ public interface OrderService {
     Order updatePizzaOrder(Long id, Order pizzaOrder);
     void deletePizzaOrder(Long id);
 	List<Order> getPastOrdersByCustomer(String customerName);
+	static Order saveOrder(Order order) {
+		
+		return null;
+	}
+	
 }
 
 

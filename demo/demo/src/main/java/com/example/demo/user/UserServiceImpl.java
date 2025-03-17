@@ -2,6 +2,7 @@ package com.example.demo.user;
 
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,4 +27,19 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-}
+
+	@Override
+	public User authenticateUser(String email, String password) {
+		
+		        Optional<User> user = userRepository.findByEmail(email);
+		        if (user.isEmpty()) {
+		            throw new RuntimeException("User not found");
+		        }
+		        if (!user.get().getPassword().equals(password)) {
+		            throw new RuntimeException("Invalid credentials");
+		        }
+		        return user.get();
+		    }
+		
+
+	}

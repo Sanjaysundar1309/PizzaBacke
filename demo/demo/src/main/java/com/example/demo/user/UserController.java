@@ -15,6 +15,17 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+    @PostMapping("/login")
+    public ResponseEntity<User> loginUser(@RequestBody User user) {
+        User authenticatedUser = userService.authenticateUser(user.getEmail(), user.getPassword());
+        return ResponseEntity.ok(authenticatedUser);
+    }
+
+    @GetMapping("/login/{email}/{password}")
+    public ResponseEntity<User> loginWithGet(@PathVariable String email, @PathVariable String password) {
+        User authenticatedUser = userService.authenticateUser(email, password);
+        return ResponseEntity.ok(authenticatedUser);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@Valid @RequestBody User user) {

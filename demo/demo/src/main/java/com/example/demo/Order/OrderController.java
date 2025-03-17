@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/orders")
 public class OrderController {
 
     @Autowired
@@ -18,6 +18,12 @@ public class OrderController {
     public Order createPizzaOrder(@RequestBody Order pizzaOrder) {
         return pizzaOrderService.createPizzaOrder(pizzaOrder);
     }
+    @PostMapping("/ord")
+    public ResponseEntity<Order> placeOrder(@RequestBody Order order) {
+        Order savedOrder = OrderService.saveOrder(order);
+        return ResponseEntity.ok(savedOrder);
+    }
+
 
     @GetMapping
     public List<Order> getAllPizzaOrders() {

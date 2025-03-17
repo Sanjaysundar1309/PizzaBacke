@@ -107,10 +107,5 @@ public class Pizza {
     
 }
 
-enum Category {
-    Veg, NonVeg
-}
 
-enum Size {
-    Small, Medium, Large
-}
+
