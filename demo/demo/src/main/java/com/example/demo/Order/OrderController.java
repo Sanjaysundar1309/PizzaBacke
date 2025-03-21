@@ -1,53 +1,29 @@
 package com.example.demo.Order;
 
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
-
     @Autowired
-    private OrderService pizzaOrderService;
+    private OrderService orderService;
 
-    @PostMapping
-    public Order createPizzaOrder(@RequestBody Order pizzaOrder) {
-        return pizzaOrderService.createPizzaOrder(pizzaOrder);
-    }
-    @PostMapping("/ord")
-    public ResponseEntity<Order> placeOrder(@RequestBody Order order) {
-        Order savedOrder = OrderService.saveOrder(order);
-        return ResponseEntity.ok(savedOrder);
+    @PostMapping("/place/{userId}")
+    public ResponseEntity<Order> placeOrder(@PathVariable Long userId, @RequestBody Order order) {
+        return ResponseEntity.ok(orderService.placeOrder(userId, order));
     }
 
-
-    @GetMapping
-    public List<Order> getAllPizzaOrders() {
-        return pizzaOrderService.getAllPizzaOrders();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Order> getPizzaOrderById(@PathVariable Long id) {
-        return ResponseEntity.ok(pizzaOrderService.getPizzaOrderById(id));
-    }
-
-    @PutMapping("/{id}")
-    public Order updatePizzaOrder(@PathVariable Long id, @RequestBody Order pizzaOrder) {
-        return pizzaOrderService.updatePizzaOrder(id, pizzaOrder);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deletePizzaOrder(@PathVariable Long id) {
-        pizzaOrderService.deletePizzaOrder(id);
-    }
-    @GetMapping("/past")
-    public ResponseEntity<List<Order>> getPastOrdersByCustomer(@RequestParam String customerName) {
-        List<Order> pastOrders = pizzaOrderService.getPastOrdersByCustomer(customerName);
-        return ResponseEntity.ok(pastOrders);
+    @GetMapping("/user/{emailId}")
+    public ResponseEntity<List<Order>> getUserOrders(@PathVariable Long userId) {
+        return ResponseEntity.ok(orderService.getUserOrders(userId));
     }
 }
-  

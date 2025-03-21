@@ -8,6 +8,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name="pizza")
 public class Pizza {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,6 +2,11 @@ package com.example.demo.user;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.demo.Order.Order;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -27,6 +32,9 @@ public class User {
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
 
     private String role;  // USER or ADMIN
     
@@ -39,12 +47,13 @@ public class User {
 	public User(Long id, @NotBlank(message = "Name is required") String name,
 			@Email(message = "Invalid email format") String email,
 			@NotBlank(message = "Password is required") @Size(min = 6, message = "Password must be at least 6 characters") String password,
-			String role) {
+			List<Order> orders, String role) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
+		this.orders = orders;
 		this.role = role;
 	}
 
@@ -89,6 +98,16 @@ public class User {
 	}
 
 
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
+
 	public String getRole() {
 		return role;
 	}
@@ -97,6 +116,6 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-    
-}
 
+}
+	

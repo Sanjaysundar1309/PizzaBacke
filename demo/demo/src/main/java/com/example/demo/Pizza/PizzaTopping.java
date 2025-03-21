@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name="pizza_topping")
 public class PizzaTopping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
